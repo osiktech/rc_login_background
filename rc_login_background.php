@@ -3,9 +3,9 @@
 /**
  * Background images for Roundcube login page, one for each month
  *
- * @author Petr Fojt <bluelama@liwe.cz>
+ * @author Osik <me@osik.de>, Petr Fojt <bluelama@liwe.cz>
  * @license GNU GPLv3+
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 class rc_login_background extends rcube_plugin {
