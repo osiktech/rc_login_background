@@ -1,10 +1,12 @@
 # rc-login-background
-Background images for Roundcube login page, one for each month
+Background images for Roundcube login page.
+
+This is a fork of [BlueLama/rc-login-background](https://github.com/bluelama/rc-login-background)
 
 ## Installation
 ```
-composer config repositories.rc-login-background vcs https://github.com/bluelama/rc-login-background.git
+composer config repositories.rc-login-background vcs https://github.com/osiktech/rc_login_background.git
 
-composer require "bluelama/rc-login-background:>=1.0.0"
+composer require "osiktech/rc_login_background:>=2.0.0"
 ```
 
