@@ -1,0 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//                      SEE ./README.md FOR DOCUMENTATION                     //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+//// Global Settings
+
+// Use one picture per month
+//
+// If this is set to true, an image per month will be displayed (if available)
+// instead of an random image from img directory
+$prefs['_GLOBAL']['monthly_picture'] = false;
+
