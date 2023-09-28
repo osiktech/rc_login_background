@@ -30,15 +30,18 @@ function GetRandomImage($dir) {
   return $random_img;
 }
 
-$img = GetRandomImage('img')
+if ($prefs['_GLOBAL']['monthly_picture']) {
+  $img = date('m').".jpg";
+} else {
+  $img = GetRandomImage('img');
+}
 
 echo "
 #layout-content {
   background-color: transparent !important;
 }
 
-body
-{
+body {
   background-image: url('img/$img');
   background-size: cover;
   background-position: center center;
