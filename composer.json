@@ -28,7 +28,7 @@
         "version": "2.0.0",
         "source": {
           "url": "https://github.com/osiktech/rc_login_background.git",
-          "type": "git",
+          "type": "vcs",
           "reference": "origin/master"
         }
       }
