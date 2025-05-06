@@ -25,7 +25,7 @@
       "type": "package",
       "package": {
         "name": "osiktech/rc_login_background",
-        "version": "2.0.0",
+        "version": "dev-master",
         "source": {
           "url": "https://github.com/osiktech/rc_login_background.git",
           "type": "vcs",
@@ -35,7 +35,7 @@
     }
   },
   "require": {
-    "osiktech/rc_login_background": "2.0.0",
+    "osiktech/rc_login_background": "dev-master",
     "php": ">=5.3.0",
     "roundcube/plugin-installer": ">=0.1.3"
   },
