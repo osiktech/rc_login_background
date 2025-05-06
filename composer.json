@@ -20,7 +20,14 @@
       "role": "Developer"
     }
   ],
+  "repositories": {
+    "rc_login_background": {
+      "type": "vcs",
+      "url": "https://github.com/osiktech/rc_login_background.git"
+    }
+  },
   "require": {
+    "osiktech/rc_login_background": "dev-master",
     "php": ">=5.3.0",
     "roundcube/plugin-installer": ">=0.1.3"
   },
