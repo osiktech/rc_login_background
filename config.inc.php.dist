@@ -15,4 +15,4 @@
 $config['rc_login_background_color'] = '#ffffff'; // Hintergrundfarbe
 $config['rc_login_background_monthly'] = true;    // Monatliches Bild (01.jpg, 02.jpg, ...)
 $config['rc_login_background_random'] = false;    // Zufälliges Bild aus assets/images/
-$config['rc_login_background_image'] = '';        // Festes Bild (z.B. 'mybackground.jpg')
+$config['rc_login_background_image'] = '';        // Fixed image filename in assets/images/ (e.g. 'mybackground.jpg')

@@ -6,7 +6,7 @@
  *
  * @author Osik <me@osik.de>, Petr Fojt <bluelama@liwe.cz>
  * @license GNU GPLv3+
- * @version 3.0.0
+ * @version 3.0.1
  */
 
 class rc_login_background extends rcube_plugin {
@@ -14,38 +14,26 @@ class rc_login_background extends rcube_plugin {
   public $task = 'login|logout';
 
   public function init() {
-    $this->add_hook('login_header', array($this, 'add_background'));
-    $this->add_hook('logout_header', array($this, 'add_background'));
+    $this->load_config();
+    $this->add_hook('login_header', [$this, 'add_background']);
+    $this->add_hook('logout_header', [$this, 'add_background']);
   }
 
   public function add_background($args) {
-    // Konfiguration auslesen
-    $use_monthly = $this->rc->config->get('rc_login_background_monthly', false);
-    $use_random = $this->rc->config->get('rc_login_background_random', false);
-    $fixed_image = $this->rc->config->get('rc_login_background_image', '');
-    $background_color = $this->rc->config->get('rc_login_background_color', '#ffffff');
+    $rcube = rcube::get_instance();
+    $use_monthly = $rcube->config->get('rc_login_background_monthly', false);
+    $use_random = $rcube->config->get('rc_login_background_random', false);
+    $fixed_image = $rcube->config->get('rc_login_background_image', '');
+    $background_color = $this->css_color($rcube->config->get('rc_login_background_color', '#ffffff'));
 
-    // Bildauswahl-Logik
-    if ($use_monthly) {
-      $img = $this->home . 'assets/images/' . date('m') . ".jpg";
-    } elseif ($use_random) {
-      $img = $this->GetRandomImage($this->home . 'assets/images/');
-    } else {
-      $img = $fixed_image ?: $this->home . 'assets/fallback.svg';
-    }
+    $relative_path = $this->resolve_background_path($use_monthly, $use_random, $fixed_image);
+    $background_image_url = $this->url($relative_path);
 
-    // URL für das Bild generieren
-    $background_image_url = $this->url([
-      '_action' => 'plugin.rc_login_background.background',
-      '_file'   => $img
-    ]);
-
-    // CSS für Login und Logout
     $style = '
       <style>
         body.login-screen,
         body.logout-screen {
-          background: ' . $background_color . ' url("' . $background_image_url . '") no-repeat center center fixed;
+          background: ' . $background_color . ' url("' . htmlspecialchars($background_image_url, ENT_QUOTES, 'UTF-8') . '") no-repeat center center fixed;
           background-size: cover;
         }
       </style>
@@ -56,58 +44,62 @@ class rc_login_background extends rcube_plugin {
   }
 
   /**
-   * Liefert ein zufälliges Bild aus dem Ordner
+   * Resolves plugin-relative asset path for the background image.
    */
-  private function GetRandomImage($dir) {
-    $imgs_arr = array();
-    $fallback = $this->home . 'assets/fallback.svg';
-
-    if (file_exists($dir) && is_dir($dir)) {
-      $dir_arr = scandir($dir);
-      $arr_files = array_diff($dir_arr, array('.', '..'));
-
-      foreach ($arr_files as $file) {
-        $file_path = $dir . $file;
-        $ext = strtolower(pathinfo($file_path, PATHINFO_EXTENSION));
-        if (in_array($ext, array('jpg', 'png', 'jpeg'))) {
-          array_push($imgs_arr, $file);
-        }
-      }
-      if (!empty($imgs_arr)) {
-        return $imgs_arr[array_rand($imgs_arr)];
-      }
+  private function resolve_background_path($use_monthly, $use_random, $fixed_image) {
+    if ($use_monthly) {
+      $relative = 'assets/images/' . date('m') . '.jpg';
+    } elseif ($use_random) {
+      $filename = $this->get_random_image($this->home . 'assets/images/');
+      $relative = $filename ? 'assets/images/' . $filename : 'assets/fallback.svg';
+    } elseif ($fixed_image !== '') {
+      $relative = 'assets/images/' . basename($fixed_image);
+    } else {
+      return 'assets/fallback.svg';
     }
-    return $fallback;
+
+    if (is_file($this->home . $relative)) {
+      return $relative;
+    }
+
+    return 'assets/fallback.svg';
   }
 
   /**
-   * Liefert das Hintergrundbild aus
+   * Returns a random image filename from the given directory, or null if none found.
    */
-  public function background()
-  {
-    $file = rcube_utils::get_input_value('_file', rcube_utils::INPUT_GPC);
-    $image_path = $this->home . 'assets/images/' . ($file ?: $this->home . 'assets/fallback.svg');
-
-    if (file_exists($image_path)) {
-      $ext = strtolower(pathinfo($image_path, PATHINFO_EXTENSION));
-      switch ($ext) {
-        case 'jpg':
-        case 'jpeg':
-          header('Content-Type: image/jpeg');
-          break;
-        case 'png':
-          header('Content-Type: image/png');
-          break;
-        default:
-          header('Content-Type: image/jpeg');
-      }
-      readfile($image_path);
-      exit;
+  private function get_random_image($dir) {
+    if (!is_dir($dir)) {
+      return null;
     }
 
-    // Fallback
-    header('Content-Type: image/jpeg');
-    readfile($this->home . 'assets/fallback.svg');
-    exit;
+    $images = [];
+    foreach (scandir($dir) as $file) {
+      if ($file === '.' || $file === '..') {
+        continue;
+      }
+      $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+      if (in_array($ext, ['jpg', 'jpeg', 'png'], true)) {
+        $images[] = $file;
+      }
+    }
+
+    if (empty($images)) {
+      return null;
+    }
+
+    return $images[array_rand($images)];
+  }
+
+  /**
+   * Restricts background color to safe hex values for inline CSS.
+   */
+  private function css_color($color) {
+    $color = trim((string) $color);
+    if (preg_match('/^#([0-9a-f]{3}|[0-9a-f]{6})$/i', $color)) {
+      return $color;
+    }
+
+    return '#ffffff';
   }
 }

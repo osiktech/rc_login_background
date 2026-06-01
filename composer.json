@@ -5,7 +5,7 @@
   "keywords": ["plugin", "background", "login"],
   "homepage": "https://github.com/osiktech/rc_login_background",
   "license": "GPLv3+",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "authors": [
     {
       "name": "Petr Fojt",
