@@ -1,18 +1,16 @@
-////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//                      SEE ./README.md FOR DOCUMENTATION                     //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
+<?php
 
-//// Global Settings
+/**
+ * Plugin configuration for rc_login_background
+ *
+ * Copy this file to one of:
+ *   - /path/to/roundcube/config/rc_login_background.inc.php  (recommended)
+ *   - /path/to/roundcube/plugins/rc_login_background/config.inc.php
+ *
+ * Or add these $config entries to your main config/config.inc.php
+ */
 
-// Use one picture per month
-//
-// If this is set to true, an image per month will be displayed (if available)
-// instead of an random image from img directory
-
-// Plugin-Konfiguration für rc_login_background
-$config['rc_login_background_color'] = '#ffffff'; // Hintergrundfarbe
-$config['rc_login_background_monthly'] = true;    // Monatliches Bild (01.jpg, 02.jpg, ...)
-$config['rc_login_background_random'] = false;    // Zufälliges Bild aus assets/images/
-$config['rc_login_background_image'] = '';        // Fixed image filename in assets/images/ (e.g. 'mybackground.jpg')
+$config['rc_login_background_color']   = '#ffffff';
+$config['rc_login_background_monthly'] = true;
+$config['rc_login_background_random']  = false;
+$config['rc_login_background_image']   = '';
