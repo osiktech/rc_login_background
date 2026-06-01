@@ -10,5 +10,9 @@
 //
 // If this is set to true, an image per month will be displayed (if available)
 // instead of an random image from img directory
-$prefs['_GLOBAL']['monthly_picture'] = false;
 
+// Plugin-Konfiguration für rc_login_background
+$config['rc_login_background_color'] = '#ffffff'; // Hintergrundfarbe
+$config['rc_login_background_monthly'] = true;    // Monatliches Bild (01.jpg, 02.jpg, ...)
+$config['rc_login_background_random'] = false;    // Zufälliges Bild aus assets/images/
+$config['rc_login_background_image'] = '';        // Festes Bild (z.B. 'mybackground.jpg')
